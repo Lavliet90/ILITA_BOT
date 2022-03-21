@@ -12,6 +12,9 @@ server = Flask(__name__)
 def start(message):
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
 
+@bot.message_handler(commands=['help'])
+def start(message):
+    bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
 
 
 @bot.message_handler(func=lambda m: True)
@@ -23,7 +26,8 @@ def test_pinging(message):
             'саси' in message.text.lower() or 'sasi' in message.text.lower():
         bot.reply_to(message, f'Сам соси, {message.from_user.first_name}')
         # Только для беседы, в личке не from_user, a chat
-    elif 'извини' in message.text.lower() or 'sorry' in message.text.lower() or 'прости' in message.text.lower():
+    elif 'извини' in message.text.lower() or 'sorry' in message.text.lower() \
+            or 'прости' in message.text.lower() or 'прошу прощения' in message.text.lower():
         bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
     else:
         pass
