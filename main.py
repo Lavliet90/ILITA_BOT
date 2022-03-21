@@ -13,9 +13,19 @@ def start(message):
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
 
 
-@bot.message_handler(func=lambda message: True, content_types=['text'])
-def echo(message):
-    bot.reply_to(message, message.text)
+
+@bot.message_handler(func=lambda m: True)
+def test_pinging(message):
+    if message.text.lower() == 'бип':
+        print("буп прошел успешно")
+        bot.send_message(message.chat.id, "буп")
+    elif 'соси' in message.text.lower() or 'sosi' in message.text.lower() or \
+            'саси' in message.text.lower() or 'sasi' in message.text.lower():
+        print(message.text.lower())
+        bot.reply_to(message,
+                     f'Сам соси, {message.from_user.first_name}')  # Только для беседы, в личке не from_user, a chat
+    else:
+        pass
 
 
 @server.route('/' + token_telegram, methods=['POST'])
@@ -61,19 +71,6 @@ if __name__ == '__main__':
 #     return '!', 200
 #
 
-#
-# @bot.message_handler(func=lambda m: True)
-# def test_pinging(message):
-#     if message.text.lower() == 'бип':
-#         print("буп прошел успешно")
-#         bot.send_message(message.chat.id, "буп")
-#     elif 'соси' in message.text.lower() or 'sosi' in message.text.lower() or \
-#             'саси' in message.text.lower() or 'sasi' in message.text.lower():
-#         print(message.text.lower())
-#         bot.reply_to(message,
-#                      f'Сам соси, {message.from_user.first_name}')  # Только для беседы, в личке не from_user, a chat
-#     else:
-#         pass
 
 
 # bot.infinity_polling()
