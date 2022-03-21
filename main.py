@@ -23,8 +23,8 @@ def test_pinging(message):
             'саси' in message.text.lower() or 'sasi' in message.text.lower():
         bot.reply_to(message, f'Сам соси, {message.from_user.first_name}')
         # Только для беседы, в личке не from_user, a chat
-    elif 'извини' in message.text.lower() or 'sorry' in  message.text.lower():
-        bot.reply_to(message, f'Sorry for what {message.from_user.first_name}?')
+    elif 'извини' in message.text.lower() or 'sorry' in message.text.lower():
+        bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
     else:
         pass
 
