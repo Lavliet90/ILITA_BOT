@@ -1,11 +1,14 @@
 import os
 import telebot
+import logging
 from flask import Flask, request
-from ilitaconfig import *
+from ilitaconfig import token_telegram, app_url
 
-APP_URL = f'https://ilitabot.herokuapp.com//{token_telegram}'
 bot = telebot.TeleBot(token_telegram)
 server = Flask(__name__)
+logger = telebot.logger
+logger.setLevel(logging.DEBUG)
+
 
 
 @bot.message_handler(commands=['start'])
@@ -13,12 +16,14 @@ def start(message):
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
 
 @bot.message_handler(commands=['help'])
-def start(message):
+def help_bot(message):
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
 
 
+
+
 @bot.message_handler(func=lambda m: True)
-def test_pinging(message):
+def gachi_requests(message):
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
@@ -34,7 +39,7 @@ def test_pinging(message):
 
 
 @server.route('/' + token_telegram, methods=['POST'])
-def get_message():
+def get_message():  #для переправочки данных в тгбота
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
@@ -42,9 +47,9 @@ def get_message():
 
 
 @server.route('/')
-def webhook():
+def webhook():  #высылает ошибки на хероку
     bot.remove_webhook()
-    bot.set_webhook(url=APP_URL)
+    bot.set_webhook(url=app_url)
     return '!', 200
 
 
