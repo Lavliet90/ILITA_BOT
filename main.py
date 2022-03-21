@@ -1,7 +1,7 @@
 import os
 import telebot
 import logging
-from ilitaconfig import *
+from ilitaconfig import token_telegram, app_url
 from flask import Flask, request
 
 
@@ -13,7 +13,8 @@ logger.setLevel(logging.DEBUG)
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.reply_to(message, f"Hello, {message.from_user.first_name}")
+    username = message.from_user.first_name
+    bot.reply_to(message, f"Hello, {username}!")
 
 @server.route(f'/{token_telegram}', methods=['POST']) #перенаправление сообщений сервера фласк к телеграм боту
 def redirect_message():
@@ -40,4 +41,4 @@ def redirect_message():
 if __name__ == "__main__":
     bot.remove_webhook()
     bot.set_webhook(url=app_url)
-    server.route(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    server.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
