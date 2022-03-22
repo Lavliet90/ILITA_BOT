@@ -14,7 +14,7 @@ db_connection = psycopg2.connect(db_uri, sslmode='require')
 db_object = db_connection.cursor()
 
 def update_messages_count(id_user):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
-    db_object.execute(f'UPDATE users SET messages = messages + 1 WHERE id = {id_user}')
+    db_object.execute(f'UPDATE slave_name SET messages = messages + 1 WHERE id = {id_user}')
     db_connection.commit()
 
 @bot.message_handler(commands=['start'])
