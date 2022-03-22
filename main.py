@@ -52,7 +52,7 @@ def create_slave(message):
 
 @bot.message_handler(commands=['stats'])
 def get_stats_spamerow(message):
-    db_object.execute('SELECT * FROM user ORDER BY messages DESC LIMIT 20')
+    db_object.execute('SELECT * FROM slawe ORDER BY messages DESC LIMIT 20')
     result = db_object.fetchone()
     user_id = message.from_user.id
     if not result:
