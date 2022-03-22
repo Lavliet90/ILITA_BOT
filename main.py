@@ -41,8 +41,9 @@ def create_slave(message):
             bot.reply_to(message, 'Чичас придумаем тебе слейва')
             print('cоздаем пользователя ' + name_slave)
             db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight, win_stats, loss_stats) VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                              (user_id, name_slave, 0, 0, 30))
+                              (user_id, name_slave, 0, 0, 30, 0, 0))
             db_connection.commit()
+            bot.reply_to(message, '/Проверь сейчас /stats')
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
     else:
