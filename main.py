@@ -43,10 +43,12 @@ def help_bot(message):
             db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
                               (id_user, name_slave, 0, 0, 30))
             db_connection.commit()
+            update_messages_count(id_user)
+            bot.reply_to(message, 'бд обновлена')
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
-        update_messages_count(id_user)
-        bot.reply_to(message, 'бд обновлена')
+            update_messages_count(id_user)
+            bot.reply_to(message, 'бд обновлена')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
     # update_messages_count(id_user)
