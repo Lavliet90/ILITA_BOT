@@ -66,7 +66,6 @@ def get_stats_spamerow(message):
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    user_id = message.from_user.id
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
@@ -79,7 +78,7 @@ def gachi_requests(message):
         bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
     else:
         pass
-    update_messages_count(user_id)
+    update_messages_count(message.from_user.id)
 
 @server.route('/' + token_telegram, methods=['POST'])
 def get_message():  #для переправочки данных в тгбота
