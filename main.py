@@ -24,7 +24,7 @@ def help_bot(message):
 
 @bot.message_handler(commands=['create_slave'])
 def help_bot(message):
-    if message.text > len('/create_slave '):
+    if len(message.text) > len('/create_slave '):
         name_slave = message.text[len('/create_slave '):]
         id_user = message.from_user.id
         db_object.execute(f'SELECT id FROM slawe WHERE id = {id_user}')
