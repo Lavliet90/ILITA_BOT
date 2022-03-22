@@ -46,16 +46,17 @@ def help_bot(message):
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
         update_messages_count(id_user)
+        bot.reply_to(message, 'бд обновлена')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
-    update_messages_count(id_user)
+    # update_messages_count(id_user)
 
 
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    user_id = message.from_user.id
-    update_messages_count(user_id)
+    # user_id = message.from_user.id
+    # update_messages_count(user_id)
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
