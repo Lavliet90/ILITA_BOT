@@ -25,12 +25,15 @@ def help_bot(message):
 def help_bot(message):
     name_slave = message.text[len('/create_slave '):]
     id_member = message.from_user.id
-    bot.reply_to(message, 'Чичас придумаем тебе Слейва')
+    bot.reply_to(message, 'Чичас придумаем тебе слейва')
 
     db_object.execute(f'SELECT id FROM slawe WHERE id = {id}')
     result = db_object.fetchone()
+    print('проверяю, дойдет ли сюда код')
     if not result:
-        db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)", (id_member, name_slave, 0, 0, 30))
+        print('cоздаем пользователя ' + name_slave)
+        db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
+                          (id_member, name_slave, 0, 0, 30))
         db_connection.commit()
 
 
