@@ -4,6 +4,7 @@ import logging
 import psycopg2
 from flask import Flask, request
 from ilitaconfig import token_telegram, app_url, db_uri
+from count_mess import counting_user_messages
 
 bot = telebot.TeleBot(token_telegram)
 server = Flask(__name__)
@@ -23,27 +24,29 @@ def help_bot(message):
 
 @bot.message_handler(commands=['create_slave'])
 def help_bot(message):
-    name_slave = message.text[len('/create_slave '):]
-    id_member = message.from_user.id
-
-
-    db_object.execute(f'SELECT id FROM slawe WHERE id = {id_member}')
-    result = db_object.fetchone()
-    print('проверяю, дойдет ли сюда код')
-    if not result:
-        bot.reply_to(message, 'Чичас придумаем тебе слейва')
-        print('cоздаем пользователя ' + name_slave)
-        db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
-                          (id_member, name_slave, 0, 0, 30))
-        db_connection.commit()
+    if message.text > len('/create_slave '):
+        name_slave = message.text[len('/create_slave '):]
+        id_user = message.from_user.id
+        db_object.execute(f'SELECT id FROM slawe WHERE id = {id_user}')
+        result = db_object.fetchone()
+        if not result:
+            bot.reply_to(message, 'Чичас придумаем тебе слейва')
+            print('cоздаем пользователя ' + name_slave)
+            db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
+                              (id_user, name_slave, 0, 0, 30))
+            db_connection.commit()
+        else:
+            bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
     else:
-        bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
+        bot.reply_to(message, 'Ты не написал имя после команды')
 
 
 
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
+    # id_user = message.from_user.id
+    # counting_user_messages(id_user)
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
@@ -56,7 +59,6 @@ def gachi_requests(message):
         bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
     else:
         pass
-
 
 @server.route('/' + token_telegram, methods=['POST'])
 def get_message():  #для переправочки данных в тгбота
