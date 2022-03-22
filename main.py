@@ -52,17 +52,16 @@ def create_slave(message):
 
 @bot.message_handler(commands=['stats'])
 def get_stats_spamerow(message):
-    db_object.execute('SELECT * FROM slawe ORDER BY messages DESC LIMIT 20')
+    db_object.execute('SELECT * FROM slawe ORDER BY messages DESC LIMIT 10')
     result = db_object.fetchone()
-    user_id = message.from_user.id
     if not result:
-        bot.reply_to(message, 'No data...')
+        bot.reply_to(message, 'Нет данных...')
     else:
-        reply_message = '- Top flooders:\n'
+        reply_message = '- Топ флудеров:\n'
         for i, item in enumerate(result):
-            reply_message += f'[{i + 1}] {item[1].strip()} ({item[2]}) : {item[2]} messages.\n'
+            reply_message += f'[{i + 1}] {item[1].strip()} ({item[0]}) : {item[2]} messages.\n'
         bot.reply_to(message, reply_message)
-    update_messages_count(user_id)
+    update_messages_count(message.from_user.id)
 
 
 @bot.message_handler(func=lambda m: True)
