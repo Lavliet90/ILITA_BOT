@@ -1,15 +1,17 @@
 import os
 import telebot
 import logging
+import psycopg2
 from flask import Flask, request
-from ilitaconfig import token_telegram, app_url
+from ilitaconfig import token_telegram, app_url, db_uri
 
 bot = telebot.TeleBot(token_telegram)
 server = Flask(__name__)
 logger = telebot.logger
 logger.setLevel(logging.DEBUG)
 
-
+db_connection = psycopg2.connect(db_uri, sslmode='require')
+db_object = db_connection.cursor()
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -18,6 +20,18 @@ def start(message):
 @bot.message_handler(commands=['help'])
 def help_bot(message):
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
+
+@bot.message_handler(commands=['create_slave'])
+def help_bot(message):
+    name_slave = message.text[len('/create_slave '):]
+    id_member = message.from_user.id
+    bot.reply_to(message, 'Чичас придумаем тебе Слейва')
+
+    db_object.execute(f'SELECT id FROM slawe WHERE id = {id}')
+    result = db_object.fetchone()
+    if not result:
+        db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)", (id_member, name_slave, 0, 0, 30))
+        db_connection.commit()
 
 
 
