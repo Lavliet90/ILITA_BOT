@@ -4,7 +4,6 @@ import logging
 import psycopg2
 from flask import Flask, request
 from ilitaconfig import token_telegram, app_url, db_uri
-from count_mess import counting_user_messages
 
 bot = telebot.TeleBot(token_telegram)
 server = Flask(__name__)
@@ -14,13 +13,22 @@ logger.setLevel(logging.DEBUG)
 db_connection = psycopg2.connect(db_uri, sslmode='require')
 db_object = db_connection.cursor()
 
+def update_messages_count(id_user):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
+    db_object.execute(f'UPDATE users SET messages = messages + 1 WHERE id = {id_user}')
+    db_connection.commit()
+
 @bot.message_handler(commands=['start'])
 def start(message):
+    id_user = message.from_user.id
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
+    update_messages_count(id_user)
+
 
 @bot.message_handler(commands=['help'])
 def help_bot(message):
+    id_user = message.from_user.id
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
+    update_messages_count(id_user)
 
 @bot.message_handler(commands=['create_slave'])
 def help_bot(message):
@@ -37,16 +45,17 @@ def help_bot(message):
             db_connection.commit()
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
+        update_messages_count(id_user)
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
-
+    update_messages_count(id_user)
 
 
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    # id_user = message.from_user.id
-    # counting_user_messages(id_user)
+    user_id = message.from_user.id
+    update_messages_count(user_id)
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
