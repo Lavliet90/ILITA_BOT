@@ -31,7 +31,7 @@ def help_bot(message):
     update_messages_count(id_user)
 
 @bot.message_handler(commands=['create_slave'])
-def help_bot(message):
+def create_slave(message):
     if len(message.text) > len('/create_slave '):
         name_slave = message.text[len('/create_slave '):]
         user_id = message.from_user.id
@@ -40,7 +40,7 @@ def help_bot(message):
         if not result:
             bot.reply_to(message, 'Чичас придумаем тебе слейва')
             print('cоздаем пользователя ' + name_slave)
-            db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
+            db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight, win_stats, loss_stats) VALUES(%s, %s, %s, %s, %s, %s, %s)",
                               (user_id, name_slave, 0, 0, 30))
             db_connection.commit()
         else:
@@ -48,8 +48,21 @@ def help_bot(message):
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
     update_messages_count(user_id)
-    # update_messages_count(user_id)
 
+
+@bot.message_handler(commands=['stats'])
+def get_stats_spamerow(message):
+    db_object.execute('SELECT * FROM user ORDER BY messages DESC LIMIT 20')
+    result = db_object.fetchone()
+    user_id = message.from_user.id
+    if not result:
+        bot.reply_to(message, 'No data...')
+    else:
+        reply_message = '- Top flooders:\n'
+        for i, item in enumerate(result):
+            reply_message += f'[{i + 1}] {item[1].strip()} ({item[2]}) : {item[2]} messages.\n'
+        bot.reply_to(message, reply_message)
+    update_messages_count(user_id)
 
 
 @bot.message_handler(func=lambda m: True)
