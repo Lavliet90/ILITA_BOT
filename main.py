@@ -13,8 +13,8 @@ logger.setLevel(logging.DEBUG)
 db_connection = psycopg2.connect(db_uri, sslmode='require')
 db_object = db_connection.cursor()
 
-def update_messages_count(id_user):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
-    db_object.execute(f'UPDATE slave_name SET messages = messages + 1 WHERE id = {id_user}')
+def update_messages_count(user_id):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
+    db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {user_id}')
     db_connection.commit()
 
 @bot.message_handler(commands=['start'])
@@ -34,24 +34,24 @@ def help_bot(message):
 def help_bot(message):
     if len(message.text) > len('/create_slave '):
         name_slave = message.text[len('/create_slave '):]
-        id_user = message.from_user.id
-        db_object.execute(f'SELECT id FROM slawe WHERE id = {id_user}')
+        user_id = message.from_user.id
+        db_object.execute(f'SELECT id FROM slawe WHERE id = {user_id}')
         result = db_object.fetchone()
         if not result:
             bot.reply_to(message, 'Чичас придумаем тебе слейва')
             print('cоздаем пользователя ' + name_slave)
             db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
-                              (id_user, name_slave, 0, 0, 30))
+                              (user_id, name_slave, 0, 0, 30))
             db_connection.commit()
-            update_messages_count(id_user)
+            update_messages_count(user_id)
             bot.reply_to(message, 'бд обновлена')
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
-            update_messages_count(id_user)
+            update_messages_count(user_id)
             bot.reply_to(message, 'бд обновлена')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
-    # update_messages_count(id_user)
+    # update_messages_count(user_id)
 
 
 
