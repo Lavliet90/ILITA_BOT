@@ -43,22 +43,18 @@ def help_bot(message):
             db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight) VALUES(%s, %s, %s, %s, %s)",
                               (user_id, name_slave, 0, 0, 30))
             db_connection.commit()
-            update_messages_count(user_id)
-            bot.reply_to(message, 'бд обновлена')
         else:
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
-            update_messages_count(user_id)
-            bot.reply_to(message, 'бд обновлена')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
+    update_messages_count(user_id)
     # update_messages_count(user_id)
 
 
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    # user_id = message.from_user.id
-    # update_messages_count(user_id)
+    user_id = message.from_user.id
     if message.text.lower() == 'бип':
         print("буп прошел успешно")
         bot.send_message(message.chat.id, "буп")
@@ -71,6 +67,7 @@ def gachi_requests(message):
         bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
     else:
         pass
+    update_messages_count(user_id)
 
 @server.route('/' + token_telegram, methods=['POST'])
 def get_message():  #для переправочки данных в тгбота
