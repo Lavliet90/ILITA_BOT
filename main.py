@@ -27,7 +27,7 @@ def help_bot(message):
     id_member = message.from_user.id
     bot.reply_to(message, 'Чичас придумаем тебе слейва')
 
-    db_object.execute(f'SELECT id FROM slawe WHERE id = {id}')
+    db_object.execute(f'SELECT id FROM slawe WHERE id = {id_member}')
     result = db_object.fetchone()
     print('проверяю, дойдет ли сюда код')
     if not result:
