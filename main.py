@@ -13,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 db_connection = psycopg2.connect(db_uri, sslmode='require')
 db_object = db_connection.cursor()
 
-def update_messages_count(user_id):
+def update_messages_count(user_id):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
     db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {user_id}')
     db_connection.commit()
 
