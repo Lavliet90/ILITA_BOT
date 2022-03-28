@@ -1,6 +1,3 @@
-from main import db_object, db_connection
-
-
 class RepliesToMessages:
     '''
     en: Catches user messages andanswers a couple of catchphrases from the gachi
