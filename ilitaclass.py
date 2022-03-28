@@ -32,6 +32,3 @@ class RepliesToMessages:
                 reply_message += f'{i + 1}: {item[1].strip()} - {item[2]} messages.\n'
             return reply_message
 
-    def update_messages_count(message):  # я не понимаю, почему db_object не работает, если его вынести в друой файл
-        db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {message.from_user.id}')
-        return db_connection.commit()
