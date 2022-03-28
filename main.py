@@ -23,7 +23,7 @@ db_object = db_connection.cursor()
 def start(message):
     id_user = message.from_user.id
     bot.reply_to(message, 'Hello, ' + message.from_user.first_name)
-    RepliesToMessages.update_messages_count(id_user)
+    RepliesToMessages.update_messages_count(message)
 
 
 @bot.message_handler(commands=['gym'])
@@ -31,14 +31,14 @@ def help_bot(message):
     id_user = message.from_user.id
     db_object.execute(f'UPDATE slawe SET weight = weight + 1 WHERE id = {id_user}')
     bot.reply_to(message, 'навалили тебе массы')
-    RepliesToMessages.update_messages_count(id_user)
+    RepliesToMessages.update_messages_count(message)
 
 
 @bot.message_handler(commands=['help'])
 def help_bot(message):
     id_user = message.from_user.id
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
-    RepliesToMessages.update_messages_count(id_user)
+    RepliesToMessages.update_messages_count(message)
 
 
 @bot.message_handler(commands=['create_slave'])
@@ -60,7 +60,7 @@ def create_slave(message):
             bot.reply_to(message, 'У тебя уже есть слейв, но функцию смены имени еще не написали')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
-    RepliesToMessages.update_messages_count(message.from_user.id)
+    RepliesToMessages.update_messages_count(message)
 
 
 @bot.message_handler(commands=['stats'])
@@ -68,12 +68,12 @@ def get_stats_spammer(message):
     db_object.execute("SELECT * FROM slawe ORDER BY messages DESC LIMIT 10")
     result = db_object.fetchall()
     bot.reply_to(message, RepliesToMessages.top_10_stats(result))
-    RepliesToMessages.update_messages_count(message.from_user.id)
+    RepliesToMessages.update_messages_count(message)
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
     bot.reply_to(message, RepliesToMessages.sosi(message))
-    RepliesToMessages.update_messages_count(message.from_user.id)
+    RepliesToMessages.update_messages_count(message)
 
 
 @server.route('/' + token_telegram, methods=['POST'])
