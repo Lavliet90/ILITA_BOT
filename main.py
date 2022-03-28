@@ -3,6 +3,8 @@ import telebot
 import logging
 import psycopg2
 from flask import Flask, request
+
+from ilitaclass import RepliesToMessages
 from ilitaconfig import token_telegram, app_url, db_uri
 
 bot = telebot.TeleBot(token_telegram)
@@ -69,18 +71,7 @@ def get_stats_spamerow(message):
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    if message.text.lower() == 'бип':
-        print("буп прошел успешно")
-        bot.send_message(message.chat.id, "буп")
-    elif 'соси' in message.text.lower() or 'sosi' in message.text.lower() or \
-            'саси' in message.text.lower() or 'sasi' in message.text.lower():
-        bot.reply_to(message, f'Сам соси, {message.from_user.first_name}')
-        # Только для беседы, в личке не from_user, a chat
-    elif 'извини' in message.text.lower() or 'sorry' in message.text.lower() \
-            or 'прости' in message.text.lower() or 'прошу прощения' in message.text.lower():
-        bot.reply_to(message, f'Sorry for what, {message.from_user.first_name}?')
-    else:
-        pass
+    bot.reply_to(message, RepliesToMessages.sosi(message))
     update_messages_count(message.from_user.id)
 
 @server.route('/' + token_telegram, methods=['POST'])
