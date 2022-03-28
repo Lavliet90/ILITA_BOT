@@ -15,9 +15,11 @@ logger.setLevel(logging.DEBUG)
 db_connection = psycopg2.connect(db_uri, sslmode='require')
 db_object = db_connection.cursor()
 
-def update_messages_count(user_id):  #я не понимаю, почему db_object не работает, если его вынести в друой файл
+
+def update_messages_count(user_id):  # я не понимаю, почему db_object не работает, если его вынести в друой файл
     db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {user_id}')
     db_connection.commit()
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -29,8 +31,17 @@ def start(message):
 @bot.message_handler(commands=['help'])
 def help_bot(message):
     id_user = message.from_user.id
+    db_object.execute(f'UPDATE slawe SET weight = weight + 1 WHERE id = {id_user}')
+    bot.reply_to(message, 'навалили тебе массы')
+    update_messages_count(id_user)
+
+
+@bot.message_handler(commands=['gym'])
+def help_bot(message):
+    id_user = message.from_user.id
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
     update_messages_count(id_user)
+
 
 @bot.message_handler(commands=['create_slave'])
 def create_slave(message):
@@ -42,8 +53,9 @@ def create_slave(message):
         if not result:
             bot.reply_to(message, 'Чичас придумаем тебе слейва')
             print('cоздаем пользователя ' + name_slave)
-            db_object.execute("INSERT INTO slawe(id, slave_name, messages, day_activ, weight, win_stats, loss_stats) VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                              (user_id, name_slave, 0, 0, 30, 0, 0))
+            db_object.execute(
+                "INSERT INTO slawe(id, slave_name, messages, day_activ, weight, win_stats, loss_stats) VALUES(%s, %s, %s, %s, %s, %s, %s)",
+                (user_id, name_slave, 0, 0, 30, 0, 0))
             db_connection.commit()
             bot.reply_to(message, '/Проверь сейчас /stats')
         else:
@@ -54,10 +66,10 @@ def create_slave(message):
 
 
 @bot.message_handler(commands=['stats'])
-def get_stats_spamerow(message):
+def get_stats_spammer(message):
     db_object.execute("SELECT * FROM slawe ORDER BY messages DESC LIMIT 10")
     result = db_object.fetchall()
-    bot.reply_to(message, RepliesToMessages.get_stats(result))
+    bot.reply_to(message, RepliesToMessages.top_10_stats(result))
 
     update_messages_count(message.from_user.id)
 
@@ -67,8 +79,9 @@ def gachi_requests(message):
     bot.reply_to(message, RepliesToMessages.sosi(message))
     update_messages_count(message.from_user.id)
 
+
 @server.route('/' + token_telegram, methods=['POST'])
-def get_message():  #для переправочки данных в тгбота
+def get_message():  # для переправочки данных в тгбота
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
     bot.process_new_updates([update])
@@ -76,7 +89,7 @@ def get_message():  #для переправочки данных в тгбот�
 
 
 @server.route('/')
-def webhook():  #высылает ошибки на хероку
+def webhook():  # высылает ошибки на хероку
     bot.remove_webhook()
     bot.set_webhook(url=app_url)
     return '!', 200

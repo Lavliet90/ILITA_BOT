@@ -14,7 +14,11 @@ class RepliesToMessages:
         else:
             return
 
-    def get_stats(result):
+    '''
+    en: Top 10 by number of messages
+    ru: Топ 10 по количеству сообщений
+    '''
+    def top_10_stats(result):
         if not result:
             return 'Нет данных...'
         else:
