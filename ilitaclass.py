@@ -1,8 +1,12 @@
+from main import db_object, db_connection
+
+
 class RepliesToMessages:
     '''
     en: Catches user messages andanswers a couple of catchphrases from the gachi
     ru: Отлавливает сообщения пользователя и дает ответы на пару коронных фраз из гачи
     '''
+
     def sosi(message):
         if 'соси' in message.text.lower() or 'sosi' in message.text.lower() or \
                 'саси' in message.text.lower() or 'sasi' in message.text.lower():
@@ -18,6 +22,7 @@ class RepliesToMessages:
     en: Top 10 by number of messages
     ru: Топ 10 по количеству сообщений
     '''
+
     def top_10_stats(result):
         if not result:
             return 'Нет данных...'
@@ -27,3 +32,6 @@ class RepliesToMessages:
                 reply_message += f'{i + 1}: {item[1].strip()} - {item[2]} messages.\n'
             return reply_message
 
+    def update_messages_count(user_id):  # я не понимаю, почему db_object не работает, если его вынести в друой файл
+        db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {user_id}')
+        db_connection.commit()
