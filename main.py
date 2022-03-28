@@ -57,14 +57,7 @@ def create_slave(message):
 def get_stats_spamerow(message):
     db_object.execute("SELECT * FROM slawe ORDER BY messages DESC LIMIT 10")
     result = db_object.fetchall()
-
-    if not result:
-        bot.reply_to(message, 'Нет данных...')
-    else:
-        reply_message = '- Топ флудеров:\n'
-        for i, item in enumerate(result):
-            reply_message += f'{i + 1}. {item[1].strip()} : {item[2]} messages.\n'
-        bot.reply_to(message, reply_message)
+    bot.reply_to(message, RepliesToMessages.get_stats(result))
 
     update_messages_count(message.from_user.id)
 

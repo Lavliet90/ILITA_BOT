@@ -13,3 +13,13 @@ class RepliesToMessages:
             return f'Sorry for what, {message.from_user.first_name}?'
         else:
             return
+
+    def get_stats(result):
+        if not result:
+            return 'Нет данных...'
+        else:
+            reply_message = '- Топ флудеров:\n'
+            for i, item in enumerate(result):
+                reply_message += f'{i + 1}: {item[1].strip()} - {item[2]} messages.\n'
+            return reply_message
+
