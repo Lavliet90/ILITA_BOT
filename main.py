@@ -28,7 +28,7 @@ def start(message):
     update_messages_count(id_user)
 
 
-@bot.message_handler(commands=['help'])
+@bot.message_handler(commands=['gym'])
 def help_bot(message):
     id_user = message.from_user.id
     db_object.execute(f'UPDATE slawe SET weight = weight + 1 WHERE id = {id_user}')
@@ -36,7 +36,7 @@ def help_bot(message):
     update_messages_count(id_user)
 
 
-@bot.message_handler(commands=['gym'])
+@bot.message_handler(commands=['help'])
 def help_bot(message):
     id_user = message.from_user.id
     bot.reply_to(message, 'Сейчас бот отлавливает все соси и извинения, вскоре добавим и борьбу')
