@@ -34,4 +34,4 @@ class RepliesToMessages:
 
     def update_messages_count(message):  # я не понимаю, почему db_object не работает, если его вынести в друой файл
         db_object.execute(f'UPDATE slawe SET messages = messages + 1 WHERE id = {message.from_user.id}')
-        db_connection.commit()
+        return db_connection.commit()
