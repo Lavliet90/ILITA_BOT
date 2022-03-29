@@ -78,7 +78,7 @@ def get_stats_spammer(message):
 def gachi_requests(message):
     print(message.json.get('reply_to_message').get('from'))
     bot.reply_to(message, RepliesToMessages.sosi(message))
-    bot.reply_to(message, message.json.get('reply_to_message').get('from'))
+    bot.reply_to(message, message.json.get('reply_to_message').get('from').det('id'))
     update_messages_count(message.from_user.id)
 
 
