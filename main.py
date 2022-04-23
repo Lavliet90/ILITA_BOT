@@ -45,6 +45,7 @@ def help_bot(message):
 
 @bot.message_handler(commands=['rename_slave'])
 def rename_slave(message):
+    print('rename stage 0')
     id_user = message.from_user.id
     print('rename stage 1')
     if len(message.text) > len('/rename_slave '):
@@ -57,6 +58,8 @@ def rename_slave(message):
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
     update_messages_count(id_user)
+
+
 @bot.message_handler(commands=['create_slave'])
 def create_slave(message):
     if len(message.text) > len('/create_slave '):
