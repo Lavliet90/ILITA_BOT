@@ -89,11 +89,11 @@ def get_stats_spammer(message):
 
 @bot.message_handler(func=lambda m: True)
 def gachi_requests(message):
-    if message.json.get('reply_to_message').get('from').get('id'):
-        bot.reply_to(message, message.json.get('reply_to_message').get('from').get('id'))
-        bot.reply_to(message, RepliesToMessages.sosi(message))
-    else:
-        bot.reply_to(message, RepliesToMessages.sosi(message))
+#     if message.json.get('reply_to_message').get('from').get('id'):
+#         bot.reply_to(message, message.json.get('reply_to_message').get('from').get('id'))
+#         bot.reply_to(message, RepliesToMessages.sosi(message))
+#     else:
+    bot.reply_to(message, RepliesToMessages.sosi(message))
 
     update_messages_count(message.from_user.id)
 
