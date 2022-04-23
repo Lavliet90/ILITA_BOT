@@ -45,15 +45,18 @@ def help_bot(message):
 
 @bot.message_handler(commands=['rename_slave'])
 def rename_slave(message):
+    id_user = message.from_user.id
+    print('rename stage 1')
     if len(message.text) > len('/rename_slave '):
+        print('rename stage 2')
         name_slave = message.text[len('/rename_slave '):]
-        user_id = message.from_user.id
-        db_object.execute(f'SELECT slave_name FROM slawe WHERE id = {user_id}')
+        db_object.execute(f'SELECT slave_name FROM slawe WHERE id = {id_user}')
         result = db_object.fetchone()
         bot.reply_to(message, result)
+        print('rename stage 3')
     else:
         bot.reply_to(message, 'Ты не написал имя после команды')
-
+    update_messages_count(id_user)
 @bot.message_handler(commands=['create_slave'])
 def create_slave(message):
     if len(message.text) > len('/create_slave '):
