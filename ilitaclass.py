@@ -5,6 +5,7 @@ class RepliesToMessages:
     '''
 
     def sosi(message):
+        print('sosi')
         if 'соси' in message.text.lower() or 'sosi' in message.text.lower() or \
                 'саси' in message.text.lower() or 'sasi' in message.text.lower():
             return f'Сам соси, {message.from_user.first_name}'
