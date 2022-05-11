@@ -72,7 +72,7 @@ def create_slave(message):
             print('cоздаем пользователя ' + name_slave)
             db_object.execute(
                 "INSERT INTO slawe(id, slave_name, messages, weight, win_stats, loss_stats, last_train) VALUES(%s, %s, %s, %s, %s, %s, %s)",
-                (user_id, name_slave, 0, 0, 30, 0, 0))
+                (user_id, name_slave, 0, 0, 30, 0, 0, 0))
             db_connection.commit()
             bot.reply_to(message, '/Проверь сейчас /stats')
         else:
